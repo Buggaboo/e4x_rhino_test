@@ -1,0 +1,41 @@
+<eExact xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="eExact-XML.xsd">
+  <GLTransactions>
+    <GLTransaction>
+      <Journal code="123"/>
+      <PaymentCondition code="10">
+        <Description>10 dagen</Description>
+        <PaymentEndOfMonths>2</PaymentEndOfMonths>
+        <PaymentDays>10</PaymentDays>
+      </PaymentCondition>
+      <FinYear number="2010"/>
+      <FinPeriod number="3"/>
+      <Description>General description of the transaction</Description>
+      <Account code="1081">
+        <Name>Apply</Name>
+      </Account>
+      <GLTransactionLine type="30" line="0" status="20">
+        <Date>2010-05-06</Date>
+        <GLAccount code="12345"/>
+        <Description>Item 1</Description>
+        <Quantity>1.0</Quantity>
+        <ForeignAmount>
+          <Currency code="EUR"/>
+          <Value>450.00</Value>
+          <Rate>1.0</Rate>
+          <VAT code="1"/>
+          <VATAmount>85.50</VATAmount>
+        </ForeignAmount>
+        <References>
+          <InvoiceNumber>123678</InvoiceNumber>
+        </References>
+      </GLTransactionLine>
+      <PaymentTerms>
+        <PaymentTerm entry="0" line="0">
+          <Description>PaymentTestTerm</Description>
+          <GLAccount code="1600"/>
+          <DueDate>2010-05-17</DueDate>
+        </PaymentTerm>
+      </PaymentTerms>
+    </GLTransaction>
+  </GLTransactions>
+</eExact>
