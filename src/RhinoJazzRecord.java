@@ -11,59 +11,93 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 // TODO - see http://www.developer.com/java/data/article.php/3417381/Using-JDBC-with-MySQL-Getting-Started.htm
-import java.sql.*;
-//import java.net.InetAddress;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException; //import java.net.InetAddress;
 //import java.net.NetworkInterface;
 //import java.net.SocketException;
 //import java.net.UnknownHostException;
 //import java.text.Format;
 import java.util.Properties;
-import com.mysql.jdbc.Driver;
+
+import junit.framework.TestCase;
 
 public class RhinoJazzRecord {
 
-	class DBDemo {
+	static class DBConnect /* TestCase extends TestCase */ {
+		/**
+		 * Stolen from here:
+		 * http://mxr.mozilla.org/mozilla/source/js/rhino/testsrc
+		 * /org/mozilla/javascript/tests/DefineFunctionPropertiesTest.java
+		 */
+		ScriptableObject global;
+		static final Object key = (String) "DBConnect"; //TestCase";
+
 		// TODO - implement all this in js function (not member function)
 		// TODO - implement in jazzrecord adapter
 		// The JDBC Connector Class.
 		private static final String dbClassName = "com.mysql.jdbc.Driver";
-		private static final String CONNECTION = "jdbc:mysql://127.0.0.1/some_database";
+
+		//@Override
+		// public void setUp() {
+		public DBConnect() {
+			Context cx = Context.enter();
+			try {
+				global = cx.initStandardObjects();
+				String[] names = { "mysql_connect" };
+				global.defineFunctionProperties(names, DBConnectTestCase.class,
+						ScriptableObject.DONTENUM);
+			} finally {
+				Context.exit();
+			}
+		}
 
 		// Connection string. emotherearth is the database the program
 		// is connecting to. You can include user and password after this
 		// by adding (say) ?user=paulr&password=paulr. Not recommended!
-		public DBDemo() throws ClassNotFoundException, SQLException {
-			System.out.println(dbClassName);
+		public void mysql_connect(String hostname, String database,
+				String username, String password)
+				throws ClassNotFoundException, SQLException {
+			// System.out.println(dbClassName);
 			// Class.forName(xxx) loads the jdbc classes and
 			// creates a drivermanager class factory
 			Class.forName(dbClassName);
 
+			String CONNECTION = "jdbc:mysql://" + hostname + "/" + database;
+
 			// Properties for user and password
 			Properties p = new Properties();
-			p.put("user", "paulr");
-			p.put("password", "paulr");
+			p.put("user", username);
+			p.put("password", password);
 
 			// Now try to connect
 			Connection c = DriverManager.getConnection(CONNECTION, p);
 
-			System.out.println("It works !");
+			// System.out.println("It works !");
 			c.close();
 		}
+
+		/*
+		 * public void test_mysql_connect() { Context cx = Context.enter(); try
+		 * { Object result = cx.evaluateString(global, "", "test source", 1,
+		 * null); assertEquals(...?...TODO - How the fuck do you test a
+		 * connection?); } finally { Context.exit(); } }
+		 */
 	}
 
 	// TODO - this is not necessary
-//	class LoadJSFunction extends FunctionObject {
-//
-//		public LoadJSFunction(String arg0, Member arg1, Scriptable arg2) {
-//			super(arg0, arg1, arg2);
-//		}
-//
-//		/**
-//		 * 
-//		 */
-//		private static final long serialVersionUID = 1L;
-//
-//	}
+	// class LoadJSFunction extends FunctionObject {
+	//
+	// public LoadJSFunction(String arg0, Member arg1, Scriptable arg2) {
+	// super(arg0, arg1, arg2);
+	// }
+	//
+	// /**
+	// *
+	// */
+	// private static final long serialVersionUID = 1L;
+	//
+	// }
 
 	public static void main(String[] args) {
 		String jsFilename = "source/jazzrecordrhino.js";
@@ -147,11 +181,11 @@ public class RhinoJazzRecord {
 		return new_scope;
 	}
 
-	// private static void enableLoadJS(Context cx, Scriptable scope)
-	// {
-	// cx.compileFunction(scope, source, sourceName, lineno, securityDomain)
-	// //cx.getElements(object)
-	// }
+	private static void enableLoadJS(Scriptable scope)
+	 {
+		 FunctionObject f_obj = new FunctionObject("load", , scope);
+		 
+	 }
 
 	/**
 	 * Deze methode staat hier dubbel omdat java zo achterlijk is dat het geen

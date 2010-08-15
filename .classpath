@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/E4X_rhino1.7R2/js-14.jar"/>
 	<classpathentry kind="lib" path="lib/E4X_rhino1.7R2/js.jar"/>
 	<classpathentry kind="lib" path="/home/jzz/projects/e4x_rhino_test/lib/mysql-connector-java-5.1.13.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
