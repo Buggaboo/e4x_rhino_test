@@ -24,28 +24,28 @@ import junit.framework.TestCase;
 
 public class RhinoJazzRecord {
 
-	static class DBConnect /* TestCase extends TestCase */ {
+	static class MysqlDBConnect {
 		/**
 		 * Stolen from here:
 		 * http://mxr.mozilla.org/mozilla/source/js/rhino/testsrc
 		 * /org/mozilla/javascript/tests/DefineFunctionPropertiesTest.java
 		 */
 		ScriptableObject global;
-		static final Object key = (String) "DBConnect"; //TestCase";
+		static final Object key = (String) "DBConnect"; // TestCase";
 
 		// TODO - implement all this in js function (not member function)
 		// TODO - implement in jazzrecord adapter
 		// The JDBC Connector Class.
 		private static final String dbClassName = "com.mysql.jdbc.Driver";
 
-		//@Override
+		// @Override
 		// public void setUp() {
-		public DBConnect() {
+		public MysqlDBConnect() {
 			Context cx = Context.enter();
 			try {
 				global = cx.initStandardObjects();
 				String[] names = { "mysql_connect" };
-				global.defineFunctionProperties(names, DBConnectTestCase.class,
+				global.defineFunctionProperties(names, MysqlDBConnect.class,
 						ScriptableObject.DONTENUM);
 			} finally {
 				Context.exit();
@@ -76,28 +76,31 @@ public class RhinoJazzRecord {
 			// System.out.println("It works !");
 			c.close();
 		}
-
-		/*
-		 * public void test_mysql_connect() { Context cx = Context.enter(); try
-		 * { Object result = cx.evaluateString(global, "", "test source", 1,
-		 * null); assertEquals(...?...TODO - How the fuck do you test a
-		 * connection?); } finally { Context.exit(); } }
-		 */
 	}
 
-	// TODO - this is not necessary
-	// class LoadJSFunction extends FunctionObject {
-	//
-	// public LoadJSFunction(String arg0, Member arg1, Scriptable arg2) {
-	// super(arg0, arg1, arg2);
-	// }
-	//
-	// /**
-	// *
-	// */
-	// private static final long serialVersionUID = 1L;
-	//
-	// }
+	static class StdGlobalFunctions {
+		ScriptableObject global;
+
+		public StdGlobalFunctions() {
+			Context cx = Context.enter();
+			try {
+				global = cx.initStandardObjects();
+				String[] names = { "load", "print" };
+				global.defineFunctionProperties(names, MysqlDBConnect.class,
+						ScriptableObject.DONTENUM);
+			} finally {
+				Context.exit();
+			}
+		}
+
+		public void load(String s) {
+			// TODO - evaluateReader...
+		}
+
+		public void print(String s) {
+
+		}
+	}
 
 	public static void main(String[] args) {
 		String jsFilename = "source/jazzrecordrhino.js";
@@ -181,15 +184,16 @@ public class RhinoJazzRecord {
 		return new_scope;
 	}
 
-	private static void enableLoadJS(Scriptable scope)
-	 {
-		 FunctionObject f_obj = new FunctionObject("load", , scope);
-		 
-	 }
+	// private static void enableLoadJS(Scriptable scope)
+	// {
+	// FunctionObject f_obj = new FunctionObject("load", , scope);
+	//		 
+	// }
 
 	/**
 	 * Deze methode staat hier dubbel omdat java zo achterlijk is dat het geen
-	 * optionele parameters ondersteunt.
+	 * optionele parameters ondersteunt. Maar daarom doe ik dit ook, om hiervan
+	 * bevrijd te worden.
 	 */
 	private static void runJSScript(Context cx, Scriptable scope,
 			String jsFilename, FileReader jsFileReader) {
@@ -204,10 +208,6 @@ public class RhinoJazzRecord {
 		}
 	}
 
-	/**
-	 * Deze methode staat hier dubbel omdat java zo achterlijk is dat het geen
-	 * optionele parameters ondersteunt.
-	 */
 	private static void runJSScript(Context cx, Scriptable scope,
 			String jsFilename, FileReader jsFileReader, String xmlString) {
 		enablePrintInJS(cx, scope);
