@@ -1,7 +1,8 @@
 /**
  * Import jazzrecord
  */
-/* // You need to define your own load function, probably steal it.
+// You need to define your own load function, probably steal it.
+/*
 load("association_loader.js");
 load("core.js");
 load("model/new_query.js");
@@ -21,3 +22,5 @@ load("util.js");
 load("migrations/schema_operations.js");
 load("migrations/migrate.js");
 */
+
+print("test");

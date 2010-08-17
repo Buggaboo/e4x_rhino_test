@@ -80,25 +80,35 @@ public class RhinoJazzRecord {
 
 	static class StdGlobalFunctions {
 		ScriptableObject global;
+		Context cx;
+		Scriptable scope;
 
-		public StdGlobalFunctions() {
-			Context cx = Context.enter();
+		public StdGlobalFunctions(Scriptable scope) {
+			scope = this.scope;
+			cx = Context.enter();
 			try {
 				global = cx.initStandardObjects();
 				String[] names = { "load", "print" };
-				global.defineFunctionProperties(names, MysqlDBConnect.class,
+				global.defineFunctionProperties(names, StdGlobalFunctions.class,
 						ScriptableObject.DONTENUM);
 			} finally {
 				Context.exit();
 			}
 		}
 
-		public void load(String s) {
-			// TODO - evaluateReader...
+		public void load(String filename) {
+			try {
+				FileReader jsFileReader = new FileReader(filename);
+				cx.evaluateReader(scope, jsFileReader, filename, 1, null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				Context.exit();
+			}
 		}
 
 		public void print(String s) {
-
+			System.out.println(s);
 		}
 	}
 
@@ -111,8 +121,9 @@ public class RhinoJazzRecord {
 			// cleanXMLForE4X(readFileAsString("xml/a_zondercomments.xml"));
 			FileReader jsFileReader = new FileReader(jsFilename);
 			Context cx = setupJSContext();
+			MysqlDBConnect mysql = new MysqlDBConnect();
 			Scriptable scope = setupJSScriptableScope(cx);
-			// runJSScript(cx, scope, jsFilename, jsFileReader);
+			StdGlobalFunctions globals = new StdGlobalFunctions(scope);
 			runJSScript(cx, scope, jsFilename, jsFileReader);
 		} catch (IOException e) {
 			e.printStackTrace();
