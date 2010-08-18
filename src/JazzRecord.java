@@ -70,9 +70,17 @@ public class JazzRecord {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Class.("MysqlDBConnect")
+		Class klass = Class.forClass("MysqlDBConnect");
+		Class arg_types[] = new Class[4];
+		arg_types[0] = String.TYPE;
+		arg_types[1] = String.TYPE;
+		arg_types[2] = String.TYPE;
+		arg_types[3] = String.TYPE;
+		Method mysql_meth = klass.getMethod("mysql_connect", arg_types);
+		FunctionObject f_obj_load   = new FunctionObject("load", mysql_meth, );
+		// TODO - scope.put("myclass?", scope, Scriptable)... or something
 		/*
-		FunctionObject f_obj_load   = new FunctionObject("load", MysqlDBConnect., );
+		
 		FunctionObject f_obj_mysql  = new FunctionObject("mysql_connect", Method(), );
 		FunctionObject f_obj_sqlite = new FunctionObject("sqlite_connect", Method(), );
 		*/
