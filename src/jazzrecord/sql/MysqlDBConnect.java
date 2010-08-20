@@ -1,4 +1,4 @@
-package sql;
+package jazzrecord;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -61,3 +61,4 @@ class MysqlDBConnect {
 		c.close();
 	}
 }
+

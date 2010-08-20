@@ -52,9 +52,13 @@ public class JazzRecord {
 		arg_types[3] = str_klass_obj;
 		Method mysql_meth;
 		try {
+			Class[] parameters = new Class[] { String.class, String.class, String.class, String.class };
+			/*
 			mysql_meth = klass.getMethod("mysql_connect", arg_types);
-			FunctionObject f_obj_load = new FunctionObject("mysql_connect",
+			FunctionObject f_obj_mysql = new FunctionObject("mysql_connect",
 					mysql_meth, scope);
+			scope.put("mysql_connect", , f_obj_mysql);
+			*/
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
