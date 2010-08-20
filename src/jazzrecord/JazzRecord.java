@@ -28,28 +28,37 @@ public class JazzRecord {
 	}
 
 	private static void add_mysql_connect() {
-		Class klass;
+		Class klass = null;
+		String className = "jazzrecord.sql.MysqlDBConnect";
 		try {
-			klass = Class.forName("jazzrecord.MysqlDBConnect");
-			Class arg_types[] = new Class[4];
-			Class str_klass_obj = Class.forName("java.lang.String");
-			arg_types[0] = str_klass_obj;
-			arg_types[1] = str_klass_obj;
-			arg_types[2] = str_klass_obj;
-			arg_types[3] = str_klass_obj;
-			Method mysql_meth;
-			try {
-				mysql_meth = klass.getMethod("mysql_connect", arg_types);
-				FunctionObject f_obj_load = new FunctionObject("mysql_connect",
-						mysql_meth, scope);
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			klass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+
 		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				klass = Class.forName( className );
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+		Class arg_types[] = new Class[4];
+		Class str_klass_obj = java.lang.String.class; //Class.forName("java.lang.String");
+		arg_types[0] = str_klass_obj;
+		arg_types[1] = str_klass_obj;
+		arg_types[2] = str_klass_obj;
+		arg_types[3] = str_klass_obj;
+		Method mysql_meth;
+		try {
+			mysql_meth = klass.getMethod("mysql_connect", arg_types);
+			FunctionObject f_obj_load = new FunctionObject("mysql_connect",
+					mysql_meth, scope);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -70,6 +79,16 @@ public class JazzRecord {
 			Context.exit();
 		}
 	}
+	
+	private static void enablePrintInJS(Context cx, Scriptable scope) {
+		/**
+		 * I know there's a prettier (more java) way, this has to do for now.
+		 * No point in optimizing, the cost is constant.
+		 */
+		// enable sysout in js context
+		String printString = "var print = function (str) { java.lang.System.out.println(str); };";
+		cx.evaluateString(scope, printString, null, 0, null);
+	}
 
 	public static void main(String[] args) {
 		String jsFilename = "source/jazzrecordrhino.js";
@@ -82,6 +101,8 @@ public class JazzRecord {
 			System.out.println("test 2");
 			scope = enableImportFromJS(cx, scope);
 			System.out.println("test 3");
+			enablePrintInJS(cx, scope);
+			System.out.println("test 4");
 			runJSScript(cx, scope, jsFilename, jsFileReader);
 		} catch (IOException e) {
 			e.printStackTrace();
