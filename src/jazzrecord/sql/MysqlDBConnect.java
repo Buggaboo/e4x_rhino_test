@@ -1,4 +1,4 @@
-package jazzrecord;
+package jazzrecord.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,23 +8,24 @@ import java.util.Properties;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 
-class MysqlDBConnect {
+public class MysqlDBConnect {
 	/**
 	 * Stolen from here:
 	 * http://mxr.mozilla.org/mozilla/source/js/rhino/testsrc
 	 * /org/mozilla/javascript/tests/DefineFunctionPropertiesTest.java
 	 */
-	ScriptableObject global;
-	static final Object key = (String) "DBConnect"; // TestCase";
+//	ScriptableObject global;
+//	static final Object key = (String) "DBConnect"; // TestCase";
 
 	// TODO - implement all this in js function (not member function)
 	// TODO - implement in jazzrecord adapter
 	// The JDBC Connector Class.
-	private static final String dbClassName = "com.mysql.jdbc.Driver";
+//	private static final String dbClassName = "com.mysql.jdbc.Driver";
 
 	// @Override
 	// public void setUp() {
-	public MysqlDBConnect() {
+	/*
+	public MysqlDBConnect() { // TODO - what the fuck does this do?
 		Context cx = Context.enter();
 		try {
 			global = cx.initStandardObjects();
@@ -34,12 +35,12 @@ class MysqlDBConnect {
 		} finally {
 			Context.exit();
 		}
-	}
+	}*/
 
 	// Connection string. emotherearth is the database the program
 	// is connecting to. You can include user and password after this
 	// by adding (say) ?user=paulr&password=paulr. Not recommended!
-	public void mysql_connect(String hostname, String database,
+	public static void mysql_connect(String hostname, String database,
 			String username, String password)
 			throws ClassNotFoundException, SQLException {
 		// System.out.println(dbClassName);

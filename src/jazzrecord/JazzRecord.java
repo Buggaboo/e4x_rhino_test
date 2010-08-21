@@ -4,11 +4,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import jazzrecord.sql.MysqlDBConnect;
+
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.FunctionObject;
 import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
 public class JazzRecord {
 	static Scriptable scope;
@@ -44,15 +47,11 @@ public class JazzRecord {
 			}
 		}
 		
-		Class arg_types[] = new Class[4];
-		Class str_klass_obj = java.lang.String.class; //Class.forName("java.lang.String");
-		arg_types[0] = str_klass_obj;
-		arg_types[1] = str_klass_obj;
-		arg_types[2] = str_klass_obj;
-		arg_types[3] = str_klass_obj;
-		Method mysql_meth;
 		try {
-			Class[] parameters = new Class[] { String.class, String.class, String.class, String.class };
+			Class[] args = new Class[] { String.class, String.class, String.class, String.class };
+			Method mysql_fn = MysqlDBConnect.class.getMethod("mysql_connect", args)
+			FunctionObject fobj_mysql = new FunctionObject("mysql_connect", mysql_fn, scope);
+			ScriptableObject.putProperty(scope, "mysql_connect", fobj_mysql);
 			/*
 			mysql_meth = klass.getMethod("mysql_connect", arg_types);
 			FunctionObject f_obj_mysql = new FunctionObject("mysql_connect",
