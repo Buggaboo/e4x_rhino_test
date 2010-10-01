@@ -24,12 +24,13 @@ import junit.framework.TestCase;
 
 public class RhinoJazzRecord {
 
+/*
 	static class MysqlDBConnect {
 		/**
 		 * Stolen from here:
 		 * http://mxr.mozilla.org/mozilla/source/js/rhino/testsrc
 		 * /org/mozilla/javascript/tests/DefineFunctionPropertiesTest.java
-		 */
+		 *
 		ScriptableObject global;
 		static final Object key = (String) "DBConnect"; // TestCase";
 
@@ -110,7 +111,7 @@ public class RhinoJazzRecord {
 		public void print(String s) {
 			System.out.println(s);
 		}
-	}
+	}*/
 
 	public static void main(String[] args) {
 		String jsFilename = "source/jazzrecordrhino.js";
@@ -121,9 +122,9 @@ public class RhinoJazzRecord {
 			// cleanXMLForE4X(readFileAsString("xml/a_zondercomments.xml"));
 			FileReader jsFileReader = new FileReader(jsFilename);
 			Context cx = setupJSContext();
-			MysqlDBConnect mysql = new MysqlDBConnect();
+			//MysqlDBConnect mysql = new MysqlDBConnect();
 			Scriptable scope = setupJSScriptableScope(cx);
-			StdGlobalFunctions globals = new StdGlobalFunctions(scope);
+//			StdGlobalFunctions globals = new StdGlobalFunctions(scope);
 			runJSScript(cx, scope, jsFilename, jsFileReader);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -136,7 +137,7 @@ public class RhinoJazzRecord {
 
 	/**
 	 * Werkt niet bij multi-line TODO - fix in het geval van multi-line
-	 * declaratie van <?xml ...
+	 * declaratie van &lt;?xml ...
 	 */
 	private static String cleanXMLDeclaration(String input) {
 		String pattern = ".*<?xml.*?>";
@@ -190,7 +191,10 @@ public class RhinoJazzRecord {
 		cx.evaluateString(scope, printString, null, 0, null);
 	}
 
-	private static Scriptable enableImportFromJS(Context cx, Scriptable scope) {
+	private static Scriptable enableImportFromJS(Context cx) {
+		/**
+		 * Enable importPackage and importClass functions, to import java package and classes.
+		 */
 		Scriptable new_scope = new ImporterTopLevel(cx);
 		return new_scope;
 	}
@@ -209,7 +213,7 @@ public class RhinoJazzRecord {
 	private static void runJSScript(Context cx, Scriptable scope,
 			String jsFilename, FileReader jsFileReader) {
 		enablePrintInJS(cx, scope);
-		Scriptable new_scope = enableImportFromJS(cx, scope);
+		Scriptable new_scope = enableImportFromJS(cx);
 		try {
 			cx.evaluateReader(new_scope, jsFileReader, jsFilename, 1, null);
 		} catch (IOException e) {

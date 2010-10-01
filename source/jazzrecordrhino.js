@@ -23,5 +23,24 @@ load("util.js");
 load("migrations/schema_operations.js");
 load("migrations/migrate.js");
 */
-var my_connection = mysql_connect("localhost", "mysql", "root","harmless");
-print("test b");
+
+print("a1");
+importPackage("java.sql");
+importClass("com.mysql.jdbc.Driver");
+print("a2");
+print("b");
+var username = "testuser";
+print("b1");
+var password = "testpass";
+print("b2");
+var url = "jdbc:mysql://localhost/test";
+print("b3");
+var driver = new Driver();
+print("b4");
+var conn = DriverManager.getConnection(url, username, password);
+print("b5");
+print ("Connection established with " + url);
+jprint("b6");
+
+//var my_connection = mysql_connect("localhost", "mysql", "root","harmless");
+//print("test b");
